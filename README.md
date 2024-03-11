@@ -40,7 +40,7 @@ func main() {
 		return c.SendString("You are logged in")
 	})
 
-	app.Listen()
+	app.Listen(":3000")
 }
 ```
 
@@ -51,7 +51,7 @@ To get started with Muick, you can simply clone the repository and start buildin
 ```bash
 git clone https://github.com/adibfahimi/muick.git
 cd muick
-go run main.go
+go run examples/hello_world.go
 ```
 
 Visit [Muick GitHub repository](https://github.com/adibfahimi/muick) for more information and documentation.
