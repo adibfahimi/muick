@@ -14,9 +14,8 @@ type Ctx struct {
 }
 
 func (c *Ctx) SendString(body string) error {
-	c.Response = types.HttpResponse{
-		Body: body,
-	}
+	c.Response.Body = body
+
 	return nil
 }
 
@@ -26,12 +25,8 @@ func (c *Ctx) JSON(body interface{}) error {
 		return err
 	}
 
-	c.Response = types.HttpResponse{
-		Body: string(json),
-		Headers: map[string]string{
-			"Content-Type": "application/json",
-		},
-	}
+	c.Response.Body = string(json)
+	c.Response.Headers["Content-Type"] = "application/json"
 
 	return nil
 }
