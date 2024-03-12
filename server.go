@@ -72,6 +72,7 @@ func HandleConnection(c net.Conn, server *Server) {
 		Request: req,
 		Response: types.HttpResponse{
 			Headers: map[string]string{},
+			Version: "1.1",
 			Reason:  "OK",
 			Body:    "",
 			Status:  200,

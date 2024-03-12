@@ -19,7 +19,7 @@ type HttpResponse struct {
 }
 
 func (res *HttpResponse) String() string {
-	statusLine := fmt.Sprintf("HTTP/1.1 %d %s\r\n", res.Status, res.Reason)
+	statusLine := fmt.Sprintf("HTTP/%s %d %s\r\n", res.Version, res.Status, res.Reason)
 
 	var headersStr string
 	for key, value := range res.Headers {
