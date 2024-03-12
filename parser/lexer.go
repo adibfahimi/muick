@@ -26,39 +26,44 @@ func (l *Lexer) readChar() {
 }
 
 func (l *Lexer) readUntil(until byte) string {
-	position := l.position
-	for l.ch != until && l.ch != 0 {
-		l.readChar()
-	}
-	return l.input[position:l.position]
-}
-
-func (l *Lexer) readHeaders() map[string]string {
-	headers := map[string]string{}
-	for l.ch != '\n' && l.ch != 0 {
-		key := l.readUntil(':')
-		l.readChar()
-		value := l.readUntil('\n')
-		headers[key] = value
-		if l.ch == '\r' {
-			l.readChar()
-		}
-		l.readChar()
-	}
-	return headers
-}
-
-func (l *Lexer) readUntilSequence(seq string) string {
 	start := l.position
-	for !strings.HasPrefix(l.input[l.position:], seq) {
+	for l.ch != until && l.ch != 0 {
 		l.readChar()
 	}
 	return l.input[start:l.position]
 }
 
 func (l *Lexer) readLine() string {
-	start := l.position
+	return l.readUntil('\n')
+}
+
+func (l *Lexer) readHeaders() map[string]string {
+	headers := make(map[string]string)
 	for l.ch != '\n' && l.ch != 0 {
+		key := strings.TrimSpace(l.readUntil(':'))
+		l.readChar()
+		value := strings.TrimSpace(l.readLine())
+		headers[key] = value
+	}
+	return headers
+}
+
+func (l *Lexer) readBody() string {
+	l.readUntilSequence("\r\n\r\n")
+
+	return l.input[l.position+4:]
+}
+
+func (l *Lexer) readUntilSequence(sequence string) string {
+	start := l.position
+	for {
+		if strings.HasPrefix(l.input[l.position:], sequence) {
+			break
+		}
+		if l.readPosition >= len(l.input) {
+			l.ch = 0
+			break
+		}
 		l.readChar()
 	}
 	return l.input[start:l.position]

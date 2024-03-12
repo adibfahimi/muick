@@ -2,6 +2,8 @@ package muick
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 
 	"github.com/adibfahimi/muick/types"
 )
@@ -46,4 +48,14 @@ func (c *Ctx) Status(code int) *Ctx {
 
 func (c *Ctx) SendStatus(code int) {
 	c.Response.Status = code
+}
+
+func (c *Ctx) BodyParser(v interface{}) error {
+	if c.Request.Body == "" {
+		return errors.New("request body is empty")
+	}
+
+	fmt.Println(c.Request.Body)
+
+	return json.Unmarshal([]byte(c.Request.Body), v)
 }

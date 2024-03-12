@@ -13,5 +13,6 @@ func ParseRequest(input string) types.HttpRequest {
 	req.Path = strings.TrimSpace(l.readUntilSequence(" HTTP"))
 	req.Version = l.readLine()
 	req.Headers = l.readHeaders()
+	req.Body = l.readBody()
 	return req
 }
