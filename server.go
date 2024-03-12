@@ -2,7 +2,6 @@ package muick
 
 import (
 	"fmt"
-	"log"
 	"net"
 
 	"github.com/adibfahimi/muick/parser"
@@ -63,7 +62,8 @@ func HandleConnection(c net.Conn, server *Server) {
 	buf := make([]byte, 1024)
 	n, err := c.Read(buf)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Error reading from connection: %v", err)
+		return
 	}
 
 	req := parser.ParseRequest(string(buf[:n]))
@@ -87,7 +87,7 @@ func HandleConnection(c net.Conn, server *Server) {
 
 	err = handler(ctx)
 	if err != nil {
-		log.Printf("Error handling request: %v", err)
+		fmt.Println("Error handling request:", err)
 		c.Write([]byte("HTTP/1.1 500 Internal Server Error\r\n\r\n"))
 		return
 	}
@@ -102,7 +102,7 @@ func (s *Server) Listen(addr ...string) {
 
 	conn, err := net.Listen("tcp", s.Addr)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Error listening:", err)
 	}
 	defer conn.Close()
 
@@ -110,7 +110,7 @@ func (s *Server) Listen(addr ...string) {
 	for {
 		c, err := conn.Accept()
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println("Error accepting connection:", err)
 		}
 		go HandleConnection(c, s)
 	}
