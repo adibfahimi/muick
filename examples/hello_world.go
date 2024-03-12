@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/adibfahimi/muick"
 )
 
@@ -28,7 +26,6 @@ func main() {
 	app.Post("/login", func(c *muick.Ctx) error {
 		var data loginRequest
 		if err := c.BodyParser(&data); err != nil {
-			log.Println(err)
 			return c.Status(400).JSON(muick.Map{
 				"error": "Invalid request",
 			})
